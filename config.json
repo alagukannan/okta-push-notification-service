@@ -1,0 +1,5 @@
+{
+    "url":"https://{{oktaDomainName}}.oktapreview.com",
+    "pollTimeinMinutes" : 5,
+    "schedulerRate" : "rate(5 minutes)"
+}

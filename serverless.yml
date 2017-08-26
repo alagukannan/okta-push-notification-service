@@ -1,0 +1,70 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: okta-push-notification-service # NOTE: update this with your service name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  region: us-west-2
+  runtime: nodejs6.10
+  stage: ${opt:stage, self:custom.defaultStage}
+  profile: ${self:custom.profiles.${self:provider.stage}}
+  memorySize: 256
+  timeout: 300s
+  environment:
+    NODE_ENV: development
+    API_URL : ${file(./config.json):url}
+    API_TOKEN : ${file(./secret.json):token}
+    POLL_TIME_MINUTES : ${file(./config.json):pollTimeinMinutes}
+    TOPIC_ARN : "arn:aws:sns:${self:provider.region}:#{AWS::AccountId}:${self:service}-${opt:stage, self:custom.defaultStage}"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource: 
+        "arn:aws:lambda:${self:provider.region}:#{AWS::AccountId}:function:okta-push-notification-service-${self:provider.stage}-*"
+    - Effect: "Allow"
+      Action:
+        - "sns:Publish"
+      Resource:
+        - "arn:aws:sns:${self:provider.region}:#{AWS::AccountId}:${self:service}-${opt:stage, self:custom.defaultStage}"
+custom:
+  defaultStage: dev
+  profiles:
+    dev: personal
+
+
+
+functions:
+  index:
+    handler: handler.index
+    events:
+      - schedule:
+          name: okta-schedule-service
+          description: 'Okta Schedule Service'
+          enabled: false
+          rate: ${file(./config.json):schedulerRate}
+# you can add CloudFormation resource templates here
+resources:
+  Resources:
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: ${self:service}-${opt:stage, self:custom.defaultStage}
+        TopicName: ${self:service}-${opt:stage, self:custom.defaultStage}
+plugins:
+  - serverless-pseudo-parameters

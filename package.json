@@ -1,0 +1,26 @@
+{
+  "name": "okta-push-notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "moment": "^2.18.1",
+    "parse-link-header": "^1.0.1",
+    "request": "^2.81.0",
+    "serverless-pseudo-parameters": "^1.1.5"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.94.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf ./.serverless"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://alagukannan@bitbucket.org/alagukannan/okra-push-notification.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/alagukannan/okra-push-notification#readme"
+}
