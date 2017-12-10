@@ -26,7 +26,7 @@ npm install
     * setup config.json and secret.json file.
     * set AWS credentials, region in serverless.yml.
 
-serverless deploy 
+serverless deploy test
 
 
 ### Contribution guidelines ###
